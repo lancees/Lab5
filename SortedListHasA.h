@@ -8,6 +8,8 @@
 #ifndef _SORTED_LIST_HAS_A
 #define _SORTED_LIST_HAS_A
 
+#include <random>
+#include <chrono>
 #include <memory>
 #include "SortedListInterface.h"
 #include "ListInterface.h"
@@ -18,6 +20,9 @@
 template<class ItemType>
 class SortedListHasA : public SortedListInterface<ItemType>
 {
+protected:
+    std::default_random_engine generator;
+    std::uniform_int_distribution<int> distribution;
 private:
    std::unique_ptr<ListInterface<ItemType>> listPtr;
 	
@@ -38,6 +43,8 @@ public:
    bool remove(int position);
    void clear();
    ItemType getEntry(int position) const;
+
+   int randInt();
 }; // end SortedListHasA
 
 
@@ -45,12 +52,13 @@ public:
 
 template<class ItemType>
 SortedListHasA<ItemType>::SortedListHasA()
-: listPtr(std::make_unique<LinkedList<ItemType>>())
-{  }  // end default constructor
+: listPtr(std::make_unique<LinkedList<ItemType>>()) , distribution(1,100), generator(std::chrono::system_clock::now().time_since_epoch().count())
+{
+}  // end default constructor
 
 template<class ItemType>
 SortedListHasA<ItemType>::SortedListHasA(const SortedListHasA<ItemType>& sList)
-: listPtr(std::make_unique<LinkedList<ItemType>>())
+: listPtr(std::make_unique<LinkedList<ItemType>>()), distribution(1,100), generator(std::chrono::system_clock::now().time_since_epoch().count())
 {
     //  add items to our list using public methods
     for(int position = 1; position <= sList.getLength(); position++)
@@ -139,6 +147,11 @@ int SortedListHasA<ItemType>::getLength() const
 {
     return listPtr->getLength();
 }  // end getLength
+
+template<class ItemType>
+int SortedListHasA<ItemType>::randInt() {
+    return distribution(generator);
+}
 
 //  End of implementation file.
 

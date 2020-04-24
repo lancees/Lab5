@@ -18,7 +18,7 @@ int main()
 //   std::unique_ptr<SortedListInterface<std::string>>
 //                  (std::make_unique<LinkedSortedList<std::string>>());
    
-   std::unique_ptr<SortedListIsA<std::string>> isAList = std::make_unique<SortedListIsA<std::string>>();
+   std::unique_ptr<SortedListHasA<std::string>> isAList = std::make_unique<SortedListHasA<std::string>>();
    
    std::shared_ptr<SortedListInterface<std::string>> listPtr;
    bool validUserSelection = false;
@@ -36,10 +36,6 @@ int main()
       std::cin >> userSelection;
       
       switch (userSelection) {
-         case 'a':
-            listPtr = std::make_shared<SortedListAsA<std::string>>();
-            validUserSelection = true;
-           break;
          case 'b':
             listPtr = std::make_shared<SortedListHasA<std::string>>();
             validUserSelection = true;

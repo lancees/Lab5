@@ -1,6 +1,6 @@
 #include <iostream>
-#include "SortedListHasA.h"
 
+#include "SortedListHasA.h"
 
 int main() {
     std::cout << "Hello, World!" << std::endl;
@@ -9,12 +9,6 @@ int main() {
     mySortedList.insertSorted(a);
     mySortedList.insertSorted(3);
     std::cout << mySortedList;
+
     return 0;
-
-
-
 }
-
-
-
-
