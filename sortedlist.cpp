@@ -4,7 +4,6 @@
 #include <iostream>
 #include <random>
 #include <chrono>
-#include <memory>
 #include "SortedList.h"
 
 int main() {
