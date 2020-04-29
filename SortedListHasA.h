@@ -54,6 +54,7 @@ template<class ItemType>
 SortedListHasA<ItemType>::SortedListHasA()
 : listPtr(std::make_unique<LinkedList<ItemType>>()) , distribution(1,100), generator(std::chrono::system_clock::now().time_since_epoch().count())
 {
+    std::cout << distribution(generator);
 }  // end default constructor
 
 template<class ItemType>

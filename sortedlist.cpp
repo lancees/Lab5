@@ -1,29 +1,24 @@
-#include <iostream>
-#include "SortedListHasA.h"
+//
+// Created by Lance Sander on 4/28/20.
+//
+#include "SortedList.h"
 
 int main() {
-    SortedListHasA<int> mySortedList =  SortedListHasA<int>();
-    std::cout << " (Inserting 21 Random Integers, 1-100)" << std::endl;
-    int firstInt;
-    int ri;
-    for (int i = 1; i <= 21; i++) {
-        ri =mySortedList.randInt();
-        if (i == 1) {
-            firstInt = ri;
-        }
-        mySortedList.insertSorted(ri);
-        std::cout << ri << std::endl;
-    }
-    int firstInsertPos = mySortedList.getPosition(firstInt);
-    std::cout << " (Removing " << firstInt << " int stored at " << firstInsertPos << " pos" << std::endl;
-    mySortedList.remove(firstInsertPos);
-    std::cout << " (Sorted 20 Integers)" << std::endl;
-    for (int i = 1; i <= mySortedList.getLength(); i++) {
-        std::cout << mySortedList.getEntry(i) << std::endl;
+    SortedList<int> sl = SortedList<int>();
+//    sl.insert(1, 3);
+//    sl.insert(1, 2);
+//    sl.insert(1, 1);
+//    sl.insert(1, 4);
+    sl.insertSorted(3);
+    sl.insertSorted(2);
+    sl.insertSorted(1);
+    sl.insertSorted(4);
+    sl.insertSorted(4);
+    sl.insertSorted(3);
+    sl.insertSorted(3);
+    sl.removeSorted(3);
+    for (int i = 1; i <= sl.getLength(); i++) {
+        std::cout << sl.getEntry(i) << std::endl;
     }
     return 0;
 }
-
-
-
-
