@@ -24,34 +24,32 @@ public:
     SortedList(const SortedList<ItemType>& sl);
     bool insertSorted(const ItemType &newEntry);
     bool removeSorted(const ItemType &anEntry);
-    bool insert(int newPosition, const ItemType& newEntry);
-    bool remove(int position);
     int getPosition(const ItemType &anEntry) const;
     bool isEmpty() const;
     int getLength() const;
     void clear();
     ItemType getEntry(int position) const;
+
+    bool insert(int newPosition, const ItemType& newEntry);
+    bool remove(int position);
     ~SortedList();
 
 };
 
 template<class ItemType>
 SortedList<ItemType>::SortedList() : head(nullptr), itemCount(0) {
-
+ //
 }
 
 template<class ItemType>
 SortedList<ItemType>::SortedList(const SortedList<ItemType>& sl) : itemCount(sl.itemCount)
 {
     auto origChainPtr = sl.head;
-
     if (origChainPtr == nullptr)
         head.reset();
-    else
-    {
+    else {
         head = std::make_shared<Node<ItemType>>();
         head->setItem(origChainPtr->getItem());
-
         auto newChainPtr = head;
         origChainPtr = origChainPtr->getNext();
         while (origChainPtr != nullptr)
@@ -62,7 +60,6 @@ SortedList<ItemType>::SortedList(const SortedList<ItemType>& sl) : itemCount(sl.
             newChainPtr = newChainPtr->getNext();
             origChainPtr = origChainPtr->getNext();
         }
-
         newChainPtr->setNext(nullptr);
     }
 }
@@ -85,34 +82,42 @@ template<class ItemType>
 bool SortedList<ItemType>::insert(int newPosition, const ItemType& newEntry)
 {
     bool ableToInsert = (newPosition >= 1) && (newPosition <= itemCount + 1);
-    if (ableToInsert)
-    {
+    if (ableToInsert) {
         auto newNodePtr = std::make_shared<Node<ItemType>>(newEntry);
-
-        if (newPosition == 1)
-        {
+        if (newPosition == 1) {
             newNodePtr->setNext(head);
             head = newNodePtr;
         }
-        else
-        {
+        else {
             auto prevPtr = getNodeAt(newPosition - 1);
-
             newNodePtr->setNext(prevPtr->getNext());
             prevPtr->setNext(newNodePtr);
         }
-
         itemCount++;
     }
-
     return ableToInsert;
 }
-
-
 
 template<class ItemType>
 bool SortedList<ItemType>::removeSorted(const ItemType &anEntry) {
     return remove(getPosition(anEntry));
+}
+
+template<class ItemType>
+bool SortedList<ItemType>::remove(int position) {
+    bool ableToRemove = (position >= 1) && (position <= itemCount);
+    if (ableToRemove) {
+        if (position == 1) {
+            head = head->getNext();
+        }
+        else {
+            auto prevPtr = getNodeAt(position - 1);
+            auto curPtr = prevPtr->getNext();
+            prevPtr->setNext(curPtr->getNext());
+        }
+        itemCount--;
+    }
+    return ableToRemove;
 }
 
 template<class ItemType>
@@ -130,6 +135,29 @@ int SortedList<ItemType>::getPosition(const ItemType &anEntry) const {
 }
 
 template<class ItemType>
+auto SortedList<ItemType>::getNodeAt(int position) const {
+    auto curPtr = head;
+    for (int skip = 1; skip < position; skip++)
+        curPtr = curPtr->getNext();
+
+    return curPtr;
+}
+
+template<class ItemType>
+ItemType SortedList<ItemType>::getEntry(int position) const {
+    bool ableToGet = (position >= 1) && (position <= itemCount);
+    if (ableToGet) {
+        auto nodePtr = getNodeAt(position);
+        return nodePtr->getItem();
+    }
+    else {
+        std::string message = "getEntry() called with an empty list or ";
+        message  = message + "invalid position.";
+        throw(PrecondViolatedExcep(message));
+    }
+}
+
+template<class ItemType>
 bool SortedList<ItemType>::isEmpty() const {
     return itemCount == 0;
 }
@@ -138,31 +166,6 @@ template<class ItemType>
 int SortedList<ItemType>::getLength() const {
     return itemCount;
 }
-template<class ItemType>
-bool SortedList<ItemType>::remove(int position)
-{
-    bool ableToRemove = (position >= 1) && (position <= itemCount);
-    if (ableToRemove)
-    {
-        if (position == 1)
-        {
-            head = head->getNext();
-        }
-        else
-        {
-            auto prevPtr = getNodeAt(position - 1);
-
-            auto curPtr = prevPtr->getNext();
-
-            prevPtr->setNext(curPtr->getNext());
-        }
-
-        itemCount--;
-    }
-
-    return ableToRemove;
-}
-
 
 template<class ItemType>
 void SortedList<ItemType>::clear() {
@@ -170,32 +173,6 @@ void SortedList<ItemType>::clear() {
     itemCount = 0;
 }
 
-template<class ItemType>
-ItemType SortedList<ItemType>::getEntry(int position) const {
-    bool ableToGet = (position >= 1) && (position <= itemCount);
-    if (ableToGet)
-    {
-        auto nodePtr = getNodeAt(position);
-        return nodePtr->getItem();
-    }
-    else
-    {
-        std::string message = "getEntry() called with an empty list or ";
-        message  = message + "invalid position.";
-        throw(PrecondViolatedExcep(message));
-    }
-}
-
-template<class ItemType>
-auto SortedList<ItemType>::getNodeAt(int position) const
-{
-
-    auto curPtr = head;
-    for (int skip = 1; skip < position; skip++)
-        curPtr = curPtr->getNext();
-
-    return curPtr;
-}
 template<class ItemType>
 SortedList<ItemType>::~SortedList(){
     clear();
